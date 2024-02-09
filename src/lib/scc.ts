@@ -1,21 +1,19 @@
-import { writable } from 'svelte/store';
 import { invoke } from '@tauri-apps/api';
 import type { SearchResponse, StreamLinkResponse, LoginResponse, CredsResponse, SetCredsResponse } from "./scc_def.ts";
 
-// Create a store for the user's data
-export let webshareToken = writable("");
-
 // Function to handle user login
-export async function login(username: string, password: string): Promise<boolean> {
-    const response: LoginResponse = await invoke('cmd_login', { username: username, password: password });
+export async function login(username: string, password: string): Promise<[boolean, string]> {
+    return new Promise(async (resolve, reject) => {
+        const response: LoginResponse = await invoke('cmd_login', { username: username, password: password });
 
-    if (response.success) {
-        webshareToken.set(response.token);
-        return true;
-    } else {
-        console.error(response.error);
-        return false;
-    }
+        if (response.success) {
+            // webshareToken.set(response.token);
+            resolve([true, response.token]);
+        } else {
+            console.error(response.error);
+            resolve([false, response.error]);
+        }
+    });
 }
 
 // Function to handle video search

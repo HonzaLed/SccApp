@@ -19,7 +19,6 @@ mod config;
 
 use serde_json;
 
-use std::fs::{self, File};
 
 #[derive(serde::Serialize)]
 struct LoginResponse {

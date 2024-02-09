@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Check } from 'lucide-svelte';
 
+    export let text = "";
     export let checked = false;
     function toggle() {
         checked = !checked;
@@ -22,6 +23,6 @@
         {/if}
     </button>
     <label class="pl-4 font-medium" for="checkbox">
-        Stay logged in
+        {text}
     </label>
 </div>
