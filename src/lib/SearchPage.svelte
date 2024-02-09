@@ -53,7 +53,7 @@
 	<!-- SEARCH BAR -->
 	<form on:submit|preventDefault={handleSearch}>
 		<input
-		  class="glassmorphic bg-transparent place-self-center w-[75%] translate-x-2 rounded-md px-3 py-2 text-white placeholder-gray-200 focus:ring-2 relative"
+		  class="glassmorphic rounded-xl bg-transparent place-self-center w-[75%] translate-x-2 px-3 py-2 text-white placeholder-gray-200 focus:ring-2 relative"
 		  type="text"
 		  id="searchInput"
 		  placeholder="Search for a movie"
@@ -70,7 +70,7 @@
 			<div class="grid grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-5 m-5 justify-around w-full">
 				{#if movies.length!=0}
 					{#each movies as i}
-						<MovieCard movie={i}/>
+						<MovieCard movie={i} on:selectMovie/>
 					{/each}
 				{/if}
 			</div>

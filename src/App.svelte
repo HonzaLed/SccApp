@@ -1,25 +1,62 @@
 <script lang="ts">
   import LoginPage from "./lib/LoginPage.svelte";
   import SearchPage from "./lib/SearchPage.svelte";
+  import MovieInfoPage from "./lib/MovieInfoPage.svelte";
+  
   import { onMount } from 'svelte';
+
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
+
+  // import fontawesome, used in login form
   import '@fortawesome/fontawesome-free/css/all.min.css'
 
-  let page: string = "login";
-
+  
+  let mainElement: HTMLElement;
+  
+  let page: Writable<string> = writable("login");
+  
+  onMount(async ()=>{
+    page.subscribe((value) => {
+      if (value != "movieinfo") {
+        changeBackground("/10-13.jpg");
+        // changeBackground("");
+      }
+    });
+  });
+    
+  let selectedMovie: any = {};
+  
   let userToken: string = "";
+  
+
+  function changeBackground(url: string) {
+    mainElement.style.backgroundImage = `url(${url})`;
+  }
 
   function handleLogin(event: CustomEvent) {
     console.log("Logged in as " + event.detail.username);
     userToken = event.detail.token;
-    page = "search";
+    $page = "search";
+  }
+
+  function handleSelectMovie(event: CustomEvent) {
+    selectedMovie = event.detail;
+    $page = "movieinfo";
+  }
+
+  function handleChangeBackground(event: CustomEvent) {
+    changeBackground(event.detail);
   }
 </script>
 
-<main class="bg-[url(/10-13.jpg)] bg-fixed bg-cover text-center text-white w-screen min-h-screen min-w-[100%]">
-  {#if page==="login"}
+<main bind:this={mainElement} class="bg-[url(/10-13.jpg)] bg-fixed bg-cover bg-center text-center text-white w-screen min-h-screen min-w-[100%]">
+  {#if $page==="login"}
     <LoginPage on:login={handleLogin} />
-  {:else if page==="search"}
-    <SearchPage />
+  {:else if $page==="search"}
+    <SearchPage on:selectMovie={handleSelectMovie}/>
+  {:else if $page==="movieinfo"}
+    <MovieInfoPage movie={selectedMovie} on:changeBackground={handleChangeBackground} />
   {/if}
 </main>
 
@@ -29,7 +66,7 @@
     @apply backdrop-filter;
     @apply backdrop-blur-md;
     @apply bg-black;
-    @apply bg-opacity-20;
+    @apply bg-opacity-15;
     @apply border;
     @apply border-gray-300;
   }

@@ -46,7 +46,7 @@
 </script>
 
 <div class="flex flex-col content-start p-0 min-h-screen">
-    <div class="glassmorphic flex items-center justify-center rounded-md grow m-5">
+    <div class="glassmorphic rounded-xl flex items-center justify-center grow m-5">
       <form on:submit|preventDefault={handleLogin} class="flex flex-col gap-2 items-start">
         <input name="username" type="text" class="w-64 glassmorphic bg-transparent place-self-center rounded-md px-3 py-2 text-white placeholder-gray-200 focus:ring-2" placeholder="Username"/>
         <input name="password" type="password" class="w-64 glassmorphic bg-transparent place-self-center rounded-md px-3 py-2 text-white placeholder-gray-200 focus:ring-2" placeholder="Password"/>
