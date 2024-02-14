@@ -8,6 +8,7 @@ mod search_def;
 mod search;
 
 mod stream_def;
+use serde::de;
 use stream_def::StreamJson;
 
 mod webshare_def;
@@ -41,6 +42,13 @@ struct CredsResponse {
 #[derive(serde::Serialize)]
 struct SetCredsResponse {
     success: bool,
+    error: String,
+}
+
+#[derive(serde::Serialize)]
+struct StreamsResponse {
+    success: bool,
+    streams: Vec<StreamJson>,
     error: String,
 }
 
@@ -101,8 +109,21 @@ fn cmd_search(query: String) -> SearchJson {
 // }
 // // remember to call `.manage(MyState::default())`
 #[tauri::command]
-fn cmd_get_streams(id: &str) -> Vec<StreamJson> {
-    search::get_streams(id)
+fn cmd_get_streams(id: &str) -> StreamsResponse {
+    let result = search::get_streams(id);
+    if result.is_err() {
+        return StreamsResponse {
+            success: false,
+            streams: vec![],
+            error: result.err().unwrap(),
+        }
+    } else {
+        return StreamsResponse {
+            success: true,
+            streams: result.unwrap(),
+            error: String::from(""),
+        }
+    }
 }
 
 #[tauri::command]

@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api';
-import type { SearchResponse, StreamLinkResponse, LoginResponse, CredsResponse, SetCredsResponse } from "./scc_def.ts";
+import type { SearchResponse, StreamLinkResponse, LoginResponse, CredsResponse, SetCredsResponse, GetStreamsResponse } from "./scc_def.ts";
 
 // Function to handle user login
 export async function login(username: string, password: string): Promise<[boolean, string]> {
@@ -25,9 +25,10 @@ export async function search(query: string): Promise<any> {
 // Function to handle video download/play
 export async function getStreamLink(name: string, ident: string, token: string): Promise<string> {
     return new Promise(async (resolve, reject) => {
-        const response: StreamLinkResponse = await invoke('cmd_get_stream_link', { name: name, ident: ident, token: token });
+        const response: StreamLinkResponse = await invoke('cmd_get_file_link', { name: name, ident: ident, token: token });
+        console.log(response);
         if (response.success) {
-            resolve(response.url);
+            resolve(response.link);
         } else {
             console.error(response.error);
             reject(response.error);
@@ -52,6 +53,18 @@ export async function saveCredentials(username: string, password: string): Promi
         const response: SetCredsResponse = await invoke('cmd_save_creds', { username: username, password: password });
         if (response.success) {
             resolve(true);
+        } else {
+            console.error(response.error);
+            reject(response.error);
+        }
+    });
+}
+
+export async function getStreams(id: string): Promise<any[]> {
+    return new Promise(async (resolve, reject) => {
+        const response: GetStreamsResponse = await invoke('cmd_get_streams', { id: id });
+        if (response.success) {
+            resolve(response.streams);
         } else {
             console.error(response.error);
             reject(response.error);

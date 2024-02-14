@@ -17,7 +17,7 @@
     $: poster = getArtPoster(movie);
     $: plot = getPlot(movie);
     $: cast = movie._source.cast;
-    
+
     function handleClick() {
         dispatch('playMovie', movie);
     }
@@ -59,13 +59,13 @@
 </script>
 
 
-<div class="flex flex-col content-start p-0 min-h-screen w-screen">
+<!-- <div class="flex flex-col content-start p-0 min-h-screen w-screen">
     <div class="!bg-opacity-30 glassmorphic rounded-xl flex flex-col items-start justify-start grow m-5 p-5 gap-5 h-screen">
-        <p class="text-xl md:text-4xl xl:text-5xl self-center"> <!-- TITLE -->
+        <p class="text-xl md:text-4xl xl:text-5xl self-center"> TITLE
             <b>{title} (<span class="text-gray-300">{year}</span>)
             </b>
-        </p> <!-- END TITLE -->
-        <div class="flex flex-col gap-2 max-h-screen"> <!-- INFO VIEW -->
+        </p> END TITLE
+        <div class="flex flex-col gap-2 max-h-screen"> INFO VIEW
             <div class="flex gap-2 grow">
                 {#each cast.slice(0, 13) as actor}
                     <ActorCard actor={actor} />
@@ -74,6 +74,27 @@
             <div class="flex flex-row gap-4">
                 <img src={poster} alt="Movie poster" class="rounded-lg h-1/4">
             </div>
-        </div> <!-- END INFO VIEW -->
+        </div> END INFO VIEW
+    </div>
+</div> -->
+
+<!-- Still bad design -->
+<div class="flex flex-col content-start p-0 min-h-screen w-screen">
+    <div class="!bg-opacity-30 glassmorphic rounded-xl flex flex-col items-start justify-start grow m-5 p-5 gap-5 h-screen">
+        <p class="text-xl md:text-4xl xl:text-5xl self-center"> {title} (<span class="text-gray-300">{year}</span>) </p>
+        <div class="flex flex-col gap-2 max-h-screen">
+            <div class="flex gap-2 grow">
+                {#each cast.slice(0, 13) as actor}
+                    <ActorCard actor={actor} />
+                {/each}
+            </div>
+            <div class="flex flex-row gap-4">
+                <img src={poster} alt="Movie poster" class="rounded-lg h-1/4">
+                <div class="flex flex-col gap-2">
+                    <p class="text-lg rounded-lg bg-black bg-opacity-30 p-2">{plot}</p>
+                    <button class="bg-black bg-opacity-30 rounded-lg p-2" on:click={handleClick}>Play</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

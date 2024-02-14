@@ -1,5 +1,6 @@
 use crate::{SearchJson, StreamJson};
 use reqwest;
+use serde_json;
 
 static API: &str = "http://plugin.sc2.zone/api";
 static TOKEN: &str = "&access_token=9ajdu4xyn1ig8nxsodr3";
@@ -19,7 +20,7 @@ fn parse_search(text: String) -> SearchJson {
     search_json.unwrap()
 }
 
-pub fn get_streams(id: &str) -> Vec<StreamJson> {
+pub fn get_streams(id: &str) -> Result<Vec<StreamJson>, String> {
     let url = format!("{}/media/{}/streams?{}", API, id, TOKEN);
     // http://plugin.sc2.zone/api/media/5ed13ce408570680401c96be/streams?access_token=9ajdu4xyn1ig8nxsodr3
     let resp: String = reqwest::blocking::get(url).unwrap().text().unwrap();
@@ -27,10 +28,10 @@ pub fn get_streams(id: &str) -> Vec<StreamJson> {
     parse_streams(resp)
 }
 
-fn parse_streams(text: String) -> Vec<StreamJson> {
+fn parse_streams(text: String) -> Result<Vec<StreamJson>, String> {
     let stream_json: Result<Vec<StreamJson>, serde_json::Error> = serde_json::from_str(&text);
     if let Err(error) = &stream_json {
-        panic!("Error parsing the JSON data: {}", error);
+        return Err(error.to_string());
     }
-    stream_json.unwrap()
+    Ok(stream_json.unwrap())
 }

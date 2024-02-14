@@ -11,7 +11,7 @@ export type SearchResponse = {
 
 export type StreamLinkResponse = {
     success: boolean,
-    url: string,
+    link: string,
     error: string,
 };
 
@@ -29,5 +29,11 @@ export type CredsResponse = {
 
 export type SetCredsResponse = {
     success: boolean,
+    error: string,
+}
+
+export type GetStreamsResponse = {
+    success: boolean,
+    streams: any[],
     error: string,
 }
